@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Dog - Cuddle Tracker</title>
+
+  <!-- =========================================
+       GOOGLE FONTS & MATERIAL SYMBOLS
+       Carichiamo i caratteri 'Fredoka', 'Nunito', 'Quicksand'
+       e le icone 'Material Symbols Rounded'
+       ========================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- =========================================
+       FOGLIO DI STILE ESTERNO
+       ========================================= -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =========================================
+       STRUTTURA HTML DELL'APPLICAZIONE
+       Mobile frame contenitore principale
+       ========================================= -->
+  <main class="app-container">
+
+    <!-- 1. Barra di stato stile smartphone -->
+    <div class="status-bar">
+      <span class="status-bar-time">09:41</span>
+      <div class="status-bar-icons">
+        <span class="material-symbols-rounded">signal_cellular_alt</span>
+        <span class="material-symbols-rounded">wifi</span>
+        <span class="material-symbols-rounded battery-icon">battery_charging_full</span>
+      </div>
+    </div>
+
+    <!-- 2. Header superiore con logo e profilo -->
+    <header class="app-header">
+      <div class="logo-group">
+        <div class="logo-badge">
+          <span class="material-symbols-rounded">pets</span>
+        </div>
+        <h1 class="app-title">Happy Dog</h1>
+      </div>
+      <button class="avatar-btn" type="button" aria-label="Profilo Utente" title="Profilo Utente">
+        <span class="material-symbols-rounded">person</span>
+      </button>
+    </header>
+
+    <!-- 3. Sottotitolo con data odierna e badge "Live" -->
+    <div class="date-subheader">
+      <div class="date-info">
+        <span class="pulse-dot"></span>
+        <span class="date-text">Oggi • Lunedì 24 Febbraio</span>
+      </div>
+      <span class="live-badge">LIVE TRACKER</span>
+    </div>
+
+    <!-- 4. Area centrale dei contenuti (Canvas) -->
+    <div class="app-main">
+
+      <!-- Contenitore particelle cuoricini fluttuanti -->
+      <div class="particle-container" id="particle-container"></div>
+
+      <!-- Banner traguardo (appare solo al raggiungimento dell'obiettivo) -->
+      <div class="celebration-banner" id="celebration-banner">
+        <div class="celebration-badge-icon">🎉</div>
+        <div>
+          <div class="celebration-text-title">Traguardo Straordinario!</div>
+          <div class="celebration-text-sub" id="celebration-text-sub">Obiettivo 20/20 raggiunto! Milo è al settimo cielo! 🐾✨</div>
+        </div>
+        <button class="close-banner-btn" id="close-banner-btn" type="button" aria-label="Chiudi banner">✕</button>
+      </div>
+
+      <!-- SEZIONE 1: Hero Card con contatore e barra di avanzamento -->
+      <section class="hero-card" id="hero-card" title="Tocca per fare una carezza a Milo">
+        <!-- Filigrana decorativa a zampa -->
+        <span class="material-symbols-rounded hero-watermark">pets</span>
+
+        <!-- Intestazione della card con razza -->
+        <div class="hero-header">
+          <div>
+            <span class="hero-subtitle">Tracciatore Giornaliero</span>
+            <h2 class="hero-dog-name">Coccole per Milo</h2>
+          </div>
+          <div class="breed-badge">
+            <span class="breed-dot"></span>
+            <span>Shiba Inu Tricolore</span>
+          </div>
+        </div>
+
+        <!-- Dita della zampa sopra il blocco contatore -->
+        <div class="paw-toes-container">
+          <span class="paw-toe paw-toe-1"></span>
+          <span class="paw-toe paw-toe-2"></span>
+          <span class="paw-toe paw-toe-3"></span>
+          <span class="paw-toe paw-toe-4"></span>
+        </div>
+
+        <!-- Box verde con il numero grande delle carezze -->
+        <div class="counter-card-box">
+          <div class="counter-icon-badge">
+            <span class="material-symbols-rounded">pets</span>
+          </div>
+          <div class="counter-number-group">
+            <span class="counter-number" id="cuddle-count">14</span>
+            <span class="material-symbols-rounded counter-heart-icon" id="counter-heart-icon">favorite</span>
+          </div>
+          <span class="counter-label">carezze e coccole registrate oggi</span>
+        </div>
+
+        <!-- Barra di progresso verso l'obiettivo giornaliero -->
+        <div class="progress-section">
+          <div class="progress-labels">
+            <label class="goal-text" id="goal-label" for="progress-bar-fill">Obiettivo: 20 carezze</label>
+            <span class="goal-percent-text" id="goal-percent">70%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 70%;"></div>
+          </div>
+        </div>
+
+        <!-- Indicatore dello stato d'animo del cane -->
+        <div class="mood-container">
+          <span class="mood-title">Stato d'animo rilevato:</span>
+          <div class="mood-pill" id="mood-pill">
+            <span id="mood-emoji">😊</span>
+            <span id="mood-text">Molto felice</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEZIONE 2: Pulsanti di interazione -->
+      <section class="actions-section">
+        <!-- Decorazione dita zampa sul pulsante -->
+        <div class="btn-paw-toes">
+          <span class="btn-paw-toe btn-paw-toe-1"></span>
+          <span class="btn-paw-toe btn-paw-toe-2"></span>
+          <span class="btn-paw-toe btn-paw-toe-3"></span>
+          <span class="btn-paw-toe btn-paw-toe-4"></span>
+        </div>
+
+        <!-- Pulsante principale: Aggiungi Carezza -->
+        <button class="btn-add-cuddle" id="add-cuddle-btn" type="button" aria-label="Aggiungi una carezza">
+          <span class="btn-paw-icon-badge">
+            <span class="material-symbols-rounded">pets</span>
+          </span>
+          <span>+ Aggiungi carezza</span>
+          <span class="material-symbols-rounded btn-heart-accent">favorite</span>
+        </button>
+
+        <!-- Pulsanti secondari: Azzera e Modifica Obiettivo -->
+        <div class="secondary-actions-grid">
+          <button class="btn-secondary btn-reset" id="reset-counter-btn" type="button">
+            <span class="material-symbols-rounded" id="reset-icon">restart_alt</span>
+            <span>Azzera contatore</span>
+          </button>
+          <button class="btn-secondary btn-edit" id="edit-goal-btn" type="button">
+            <span class="material-symbols-rounded">edit</span>
+            <span>Modifica obiettivo</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SEZIONE 3: Scheda informativa con consiglio veterinario -->
+      <section class="tip-card">
+        <div class="tip-header">
+          <div class="tip-icon-box">💡</div>
+          <h3 class="tip-title">Consiglio del giorno: Più coccole</h3>
+        </div>
+        <p class="tip-body">
+          Le carezze sul petto e dietro le orecchie riducono il livello di cortisolo nel tuo cane e rafforzano il legame affettivo. Bastano pochi minuti di attenzione costante per migliorare il suo benessere.
+        </p>
+
+        <!-- Widget statistica settimanale -->
+        <div class="metric-widget">
+          <div class="metric-info">
+            <div class="metric-icon-box">
+              <span class="material-symbols-rounded">query_stats</span>
+            </div>
+            <span class="metric-label">Media settimanale:</span>
+          </div>
+          <span class="metric-value">18 carezze / giorno</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 5. Footer dell'applicazione -->
+    <footer class="app-footer">
+      <div class="footer-brand">
+        <span class="footer-dot"></span>
+        <span>Happy Dog Care</span>
+      </div>
+      <div class="footer-love">
+        <span>Fatto con amore</span>
+        <span>🐾</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- =========================================
+       POPUP MODALE DELLA MASCOTTE (MILO LO SHIBA)
+       Mostrato a schermo intero quando si accarezza il cane
+       ========================================= -->
+  <div class="popup-overlay" id="dog-popup-modal" role="dialog" aria-modal="true" aria-label="Milo scodinzola">
+    <div class="popup-content" id="mascot-display-group">
+      
+      <!-- Fumetto con la reazione sonora del cane -->
+      <div class="popup-speech-bubble" id="cuddle-reaction-badge">
+        <span id="cuddle-reaction-text">*Wuf!* ❤️</span>
+        <span>🐾</span>
+      </div>
+
+      <!-- Disegno vettoriale SVG animato di Milo (Shiba Inu) -->
+      <div class="dog-svg-wrapper">
+        <svg class="dog-svg" id="dog-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Orecchie a triangolo -->
+          <!-- Orecchio Sinistro -->
+          <polygon points="20,44 14,14 42,28" fill="#1C1917" stroke="#111827" stroke-width="2.5" stroke-linejoin="round" />
+          <polygon points="23,40 18,18 38,29" fill="#D97706" />
+          <polygon points="24,37 21,22 34,30" fill="#FBCFE8" opacity="0.85" />
+
+          <!-- Orecchio Destro -->
+          <polygon points="80,44 86,14 58,28" fill="#1C1917" stroke="#111827" stroke-width="2.5" stroke-linejoin="round" />
+          <polygon points="77,40 82,18 62,29" fill="#D97706" />
+          <polygon points="76,37 79,22 66,30" fill="#FBCFE8" opacity="0.85" />
+
+          <!-- Petto e corpo del cane -->
+          <path d="M30 76 C26 86, 20 95, 18 100 L82 100 C80 95, 74 86, 70 76 Z" fill="#1C1917" />
+          <path d="M38 76 C38 88, 50 96, 50 96 C50 96, 62 88, 62 76 Z" fill="#FFFBEB" />
+          <ellipse cx="50" cy="78" rx="8" ry="4" fill="#D97706" />
+
+          <!-- Testa nera dello Shiba -->
+          <circle cx="50" cy="48" r="30" fill="#1C1917" stroke="#111827" stroke-width="2" />
+
+          <!-- Macchie focate caratteristiche sopra gli occhi (sopracciglia) -->
+          <ellipse cx="37" cy="33" rx="4.2" ry="3.2" fill="#D97706" />
+          <ellipse cx="63" cy="33" rx="4.2" ry="3.2" fill="#D97706" />
+
+          <!-- Guance bianche (Urajiro) -->
+          <path d="M22 50 C22 66, 32 74, 50 74 C68 74, 78 66, 78 50 C74 42, 66 43, 62 48 C56 53, 44 53, 38 48 C34 43, 26 42, 22 50 Z" fill="#FFFBEB" />
+          <path d="M23 46 C27 42, 35 44, 38 49 C33 56, 24 57, 23 46 Z" fill="#D97706" opacity="0.85" />
+          <path d="M77 46 C73 42, 65 44, 62 49 C67 56, 76 57, 77 46 Z" fill="#D97706" opacity="0.85" />
+
+          <!-- Musetto color panna -->
+          <ellipse cx="50" cy="57" rx="14" ry="11" fill="#FEF3C7" />
+
+          <!-- Tartufo / Nasino nero -->
+          <path d="M45 50 L55 50 C55 50, 52 56, 50 56 C48 56, 45 50, 45 50 Z" fill="#0F172A" />
+          <ellipse cx="48.5" cy="51.5" rx="1.2" ry="0.8" fill="#FFFFFF" opacity="0.6" />
+
+          <!-- Occhio Sinistro -->
+          <ellipse cx="37" cy="42" rx="4.2" ry="4" fill="#0F172A" />
+          <circle cx="38.5" cy="40.5" r="1.6" fill="#FFFFFF" />
+          <circle cx="36" cy="43.5" r="0.7" fill="#FFFFFF" opacity="0.7" />
+
+          <!-- Occhio Destro (aperto normale) -->
+          <g id="eye-right-open">
+            <ellipse cx="63" cy="42" rx="4.2" ry="4" fill="#0F172A" />
+            <circle cx="64.5" cy="40.5" r="1.6" fill="#FFFFFF" />
+            <circle cx="62" cy="43.5" r="0.7" fill="#FFFFFF" opacity="0.7" />
+          </g>
+
+          <!-- Occhio Destro (strizzatina d'occhio birichina) -->
+          <path id="eye-right-wink" class="hidden" d="M59 43 Q63 37 67 43" stroke="#0F172A" stroke-width="3" stroke-linecap="round" fill="none" />
+
+          <!-- Bocca sorridente -->
+          <path d="M44 59 Q47 62 50 59 Q53 62 56 59" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+          <!-- Linguetta rosa penzolante -->
+          <path d="M47.5 59.5 C47.5 67, 52.5 67, 52.5 59.5 Z" fill="#FB7185" />
+
+          <!-- Guanciotte rosate -->
+          <ellipse cx="28" cy="54" rx="4.5" ry="3" fill="#FB7185" opacity="0.55" />
+          <ellipse cx="72" cy="54" rx="4.5" ry="3" fill="#FB7185" opacity="0.55" />
+
+          <!-- Coda arricciata che scodinzola -->
+          <g id="dog-tail-group" class="animate-wag">
+            <path d="M72 82 C82 72, 86 58, 76 54 C68 50, 64 62, 70 70" stroke="#1C1917" stroke-width="7" stroke-linecap="round" fill="none" />
+            <path d="M74 55 C70 52, 66 60, 70 67" stroke="#FFFBEB" stroke-width="4" stroke-linecap="round" fill="none" />
+          </g>
+
+          <!-- Zampette anteriori alzate durante i festeggiamenti -->
+          <g id="party-paws" class="hidden">
+            <ellipse cx="32" cy="84" rx="6" ry="5" fill="#FFFBEB" stroke="#1C1917" stroke-width="2" />
+            <ellipse cx="68" cy="84" rx="6" ry="5" fill="#FFFBEB" stroke="#1C1917" stroke-width="2" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Testi di ringraziamento sotto Milo -->
+      <div class="popup-text-group">
+        <h3 class="popup-dog-title" id="popup-dog-title">Milo ti ringrazia!</h3>
+        <p class="popup-dog-subtext" id="popup-dog-subtext">Carezza registrata con affetto 💖</p>
+        <span class="popup-tap-hint">Tocca lo schermo per coccolare ancora 🐾</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================
+       SCRIPT JAVASCRIPT ESTERNO
+       ========================================= -->
+  <script src="script.js"></script>
+</body>
+</html>
